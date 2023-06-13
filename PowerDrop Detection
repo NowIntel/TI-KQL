@@ -1,0 +1,17 @@
+// Author: Ryan Jordan - NowIntel
+// Date: 13/06/23 
+// Website: nowintel.substack.com
+
+let powerdrop = DeviceProcessEvents
+| where ingestion_time() > ago(7d) // adjust the time range as needed
+| where ProcessCommandLine has "powershell" and (ProcessCommandLine has "wmi" or ProcessCommandLine has "base64" or ProcessCommandLine has "utf-16le")
+| project ingestion_time(), DeviceName, ProcessCommandLine;
+powerdrop
+| join kind=inner (
+    DeviceNetworkEvents
+    | where ingestion_time() > ago(7d) // adjust the time range as needed
+    | where RemotePort == 0 and Protocol == "ICMP"
+    | where RemoteIP has "." 
+    | where InitiatingProcessCommandLine has "powershell"
+    | project ingestion_time(), DeviceName, InitiatingProcessCommandLine, RemoteIP, Protocol
+) on $left.$IngestionTime == $right.$IngestionTime and $left.DeviceName == $right.DeviceName and $left.ProcessCommandLine == $right.InitiatingProcessCommandLine;
