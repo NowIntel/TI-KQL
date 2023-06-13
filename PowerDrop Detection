@@ -10,7 +10,7 @@ powerdrop
 | join kind=inner (
     DeviceNetworkEvents
     | where ingestion_time() > ago(7d) // adjust the time range as needed
-    | where RemotePort == 0 and Protocol == "ICMP"
+    | where RemotePort == 0 and Protocol == "ICMP" // PowerDrop uses ICMP echo requests to communicate with its command-and-control server 
     | where RemoteIP has "." 
     | where InitiatingProcessCommandLine has "powershell"
     | project ingestion_time(), DeviceName, InitiatingProcessCommandLine, RemoteIP, Protocol
