@@ -1,0 +1,18 @@
+// Credit to Steven Lim.
+// Use in defender 356's advanced threat hunting to reveal all external teams messages to internal users that contain a link.
+CloudAppEvents
+| where Timestamp > ago(30d) 
+| where Application contains "Microsoft Teams"
+| where ActionType == "MessageCreatedHasLink"
+| where AccountId contains "@"
+| extend ExtUserDomain = tostring(split(AccountId, '@')[1])
+| extend CommunicationType=tostring(RawEventData.CommunicationType)
+| extend ClientIP=tostring(RawEventData.ClientIP)
+| extend ExtUserIP = tostring(split(ClientIP, '::ffff:')[1])
+| extend MsgURL=tostring(RawEventData.MessageURLs)
+| extend TeamsMsgURL=substring(MsgURL, 2, strlen(MsgURL)-4)
+| where CommunicationType == "OneOnOne" or CommunicationType == "GroupChat"
+| sort by Timestamp desc 
+| project Timestamp, ExtUserDomain, AccountId, ExtUserIP, IPAddress, IsAnonymousProxy, CountryCode, City, ISP, IPTags, IPCategory, RawEventData, TeamsMsgURL
+| join UrlClickEvents on $left.TeamsMsgURL == $right.Url
+| where Workload == "Teams"
