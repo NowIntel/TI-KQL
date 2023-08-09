@@ -1,3 +1,6 @@
+// Author: Ryan Jordan - NowIntel
+// Date: 10/08/23 
+// Website: nowintel.substack.com
 // Check for file modifications with the .akira extension
 DeviceFileEvents
 | where TimeGenerated > ago(1d)
