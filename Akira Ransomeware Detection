@@ -1,0 +1,6 @@
+// Check for file modifications with the .akira extension
+DeviceFileEvents
+| where TimeGenerated > ago(1d)
+| where ActionType == "FileCreated" or ActionType == "FileModified"
+| where FileName endswith ".akira"
+| summarize count() by DeviceId, DeviceName, FileName, FolderPath, ActionType
