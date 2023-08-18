@@ -1,6 +1,6 @@
 // Author: Ryan Jordan - NowIntel
 // Date: 13/06/23 
-// Website: nowintel.substack.com
+
 
 let powerdrop = DeviceProcessEvents
 | where ingestion_time() > ago(7d) // adjust the time range as needed
