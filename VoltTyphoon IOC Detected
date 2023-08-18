@@ -1,6 +1,5 @@
 // Author: Ryan Jordan - NowIntel
 // Date: 01/06/23 
-// Website: nowintel.substack.com
 // Observation: May produce false positives due to Volt Typhoons 'living off the land' TTP's (use of legitimate tools to evade detection)
 let fileNames = dynamic(["ntds.dit", "SYSTEM", "SAM", "Security", "boot.ini", "wininit.ini", "winlogon.exe", "ntuser.dat", "ntuser.pol", "sam.dll", "security.dll", "bootcfg.dat", "wininit.dll", "winlogon.dll", "ntuser.dat.log", "ntuser.pol.log", "sam.dll.log", "security.dll.log", "bootcfg.dat.log", "wininit.dll.log", "winlogon.dll.log"]);
 let tcpPorts = dynamic([445]);
