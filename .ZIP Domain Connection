@@ -1,6 +1,5 @@
 // Author: Ryan Jordan - NowIntel
 // Date: 01/06/23 
-// Website: nowintel.substack.com
 
 DeviceNetworkEvents
 | where RemoteUrl has ".zip"
