@@ -1,0 +1,8 @@
+// Author: Ryan Jordan - NowIntel
+// Date: 25/08/23 
+// put in place following mfa evasion observed with the use of evil proxy: https://www.proofpoint.com/us/blog/email-and-cloud-threats/cloud-account-takeover-campaign-leveraging-evilproxy-targets-top-level
+
+AADUserRiskEvents
+| where RiskEventType =~ 'anomalousToken'
+| summarize count() by UserDisplayName, tostring(Location)
+| order by count_ desc
