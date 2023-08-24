@@ -1,0 +1,11 @@
+// Author: Ryan Jordan - NowIntel
+// Date: 25/08/23 
+
+// Get the process creation events from DeviceProcessEvents table
+DeviceProcessEvents
+// Filter by the process names of impacket and remcom tools
+| where InitiatingProcessFileName in~ ("wmiexec.py", "smbexec.py", "psexec.py", "secretsdump.py", "mimikatz.py", "remcom.exe")
+// Project the relevant columns
+| project TimeGenerated, DeviceName, AccountName, InitiatingProcessFileName, ProcessCommandLine, InitiatingProcessCommandLine
+// Sort by timestamp in descending order
+| order by TimeGenerated desc
