@@ -1,9 +1,9 @@
 // Author: Ryan Jordan - NowIntel
-// Date: 10/08/23 
+// Date: 10/10/23 
 // Website: nowintel.substack.com
-// Check for file modifications with the .akira extension
-DeviceFileEvents
-| where TimeGenerated > ago(1d)
-| where ActionType == "FileCreated" or ActionType == "FileModified"
-| where FileName endswith ".akira"
+// Check for file modifications with the .akira or .POWERRANGES extension
+DeviceFileEvents 
+| where TimeGenerated > ago(1d) 
+| where ActionType == "FileCreated" or ActionType == "FileModified" 
+| where FileName endswith ".akira" or FileName endswith ".POWERRANGES" 
 | summarize count() by DeviceId, DeviceName, FileName, FolderPath, ActionType
