@@ -1,0 +1,11 @@
+// For detection of hashes contained in multiple external TI sources aswell as from the sentinel ThreatIntelligenceIndicator table
+let processData = (_Im_Process_EmptyV01 | extend hash = tolower(TargetProcessSHA256));
+let IOCData1 = materialize(externaldata (hash: string) [@"
+https://bazaar.abuse.ch/export/txt/sha256/recent/
+"] | where hash !startswith "#" | extend source = "bazaar", hash = tolower(hash));
+let IOCData2 = materialize(ThreatIntelligenceIndicator | where isnotempty(FileHashValue) | extend source = "sentinel_ti", hash = tolower(FileHashValue));
+let IOCData3 = materialize(externaldata (hashes: string) [@"
+https://www.malshare.com/daily/malshare.current.all.txt
+"] | extend hash = tostring(split(hashes, " ")[2]) | extend source = "share", hash = tolower(hash));
+let allIOCs = (IOCData1 | union IOCData2 | union IOCData3);
+processData | join (allIOCs) on hash | extend hashAlgo = "sha256"
